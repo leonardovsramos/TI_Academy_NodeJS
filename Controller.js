@@ -42,7 +42,7 @@ app.get("/clientes", async(req, res) => {
 app.get("/pedidos", async(req, res) => {
     await pedido.create({
         data: new Date("2022-02-09"),
-        // ClienteId: ,
+        ClienteId: "1",
         createAt: new Date(),
         updateAt: new Date()
     });
