@@ -5,6 +5,7 @@ const models = require("./models");
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 
 let cliente = models.Cliente;
 let itempedido = models.ItemPedido;
@@ -15,15 +16,21 @@ app.get("/", function(req, res) {
     res.send("Olá, Mundo!");
 });
 
-app.get("/servicos", async(req, res) => {
-    await servico.create({
-        nome: "HTML e CSS",
-        descricao: "Curso desenvolvido pela TI Academy, focado no desenvolvimento de páginas estáticas com HTML5 e CSS3",
-        createAt: new Date(),
-        updateAt: new Date()
+app.post("/servicos", async(req, res) => {
+    await servico.create(
+        req.body
+    ).then(function() {
+        return res.json({
+            error: false,
+            message: "O serviço foi criado com sucesso"
+        })
+    }).catch(function(error) {
+        return res.status(400).json({
+            error: true,
+            message: "Foi impossível se conectar com o servidor!"
+        })
     });
-    res.send("O serviço foi criado com sucesso");
-})
+});
 
 app.get("/clientes", async(req, res) => {
     await cliente.create({
@@ -42,7 +49,7 @@ app.get("/clientes", async(req, res) => {
 app.get("/pedidos", async(req, res) => {
     await pedido.create({
         data: new Date("2022-02-09"),
-        ClienteId: "1",
+        ClienteId: 1,
         createAt: new Date(),
         updateAt: new Date()
     });
