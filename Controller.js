@@ -32,19 +32,24 @@ app.post("/servicos", async(req, res) => {
     });
 });
 
-app.get("/clientes", async(req, res) => {
-    await cliente.create({
-        nome: "Eduardo Vieira",
-        endereco: "Rua rosa cruz, 411",
-        cidade: "Maringá",
-        uf: "PR",
-        nascimento: new Date("1950-02-14"),
-        clienteDesde: new Date("2018-06-17"),
-        createAt: new Date(),
-        updateAt: new Date()
+app.post("/clientes", async(req, res) => {
+    await cliente.create(
+        req.body
+    ).then(function() {
+        return res.json({
+            error: false,
+            message: "O cliente foi cadastrado com sucesso!"
+        })
+    }).catch(function(error) {
+        return res.status(400).json({
+            error: true,
+            message: "Não foi possível cadastrar o Cliente!"
+        })
     });
-    res.send("Cliente cadastrado com Sucesso!");
-});
+}); 
+// Atenção: ao passar datas no formato JSON, elas devem obedecer o seguinte padrão
+// Entrada: new Date("2022-02-09")
+// JSON: "2022-02-09"
 
 app.get("/pedidos", async(req, res) => {
     await pedido.create({
@@ -55,6 +60,25 @@ app.get("/pedidos", async(req, res) => {
     });
     res.send("Pedido realizado com Sucesso!")
 });
+
+app.post("/pedidos", async(req, res) => {
+    await pedido.create(
+        req.body
+    ).then(function() {
+        return res.json({
+            error: false,
+            message: "Pedido realizado com sucesso!"
+        })
+    }).catch(function(error) {
+        return res.status(400).json({
+            error: true,
+            message: "Pedido não realizado!"
+        })
+    });
+});
+// Atenção: ao passar datas no formato JSON, elas devem obedecer o seguinte padrão
+// Entrada: new Date("2022-02-09")
+// JSON: "2022-02-09"
 
 let port = process.env.port || 3001;
 
